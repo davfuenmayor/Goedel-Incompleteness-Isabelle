@@ -1,11 +1,9 @@
-(*<*)
 theory mbc_properties
   imports embedding
 begin
 nitpick_params[assms=true, user_axioms=true, show_all, expect=genuine, format = 3]
-(*>*)
 
-section \<open>mbC Properties\<close>
+section \<open>Properties of paraconsistent logic mbC \<close>
 
 abbreviation neg :: "wo\<Rightarrow>wo" ("\<^bold>\<not>_" [54] 55) where "\<^bold>\<not>\<phi> \<equiv> \<^bold>\<not>\<^sup>p\<phi>" (* negation is paraconsistent*)
 abbreviation circ :: "wo\<Rightarrow>wo" ("\<^bold>\<circ>_" [54] 55) where "\<^bold>\<circ>\<phi> \<equiv> \<^bold>\<circ>\<^sup>m\<^sup>b\<^sup>c\<phi>" (* logic is (R)mbC *)
@@ -41,6 +39,4 @@ lemma "[\<^bold>\<circ>b, \<^bold>\<not>a \<^bold>\<rightarrow> b \<^bold>\<turn
 lemma "[\<^bold>\<not>a \<^bold>\<rightarrow> \<^bold>\<not>b \<^bold>\<turnstile>\<^sub>l b \<^bold>\<rightarrow> a]" nitpick oops (* countermodel found *)
 lemma "[\<^bold>\<circ>b, \<^bold>\<not>a \<^bold>\<rightarrow> \<^bold>\<not>b \<^bold>\<turnstile>\<^sub>l b \<^bold>\<rightarrow> a]" by blast
 
-(*<*)
 end
-(*>*)
