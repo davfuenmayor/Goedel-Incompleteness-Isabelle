@@ -65,7 +65,7 @@ lemma G_eq_SCons: fixes G
                   assumes "\<forall>\<phi>. [\<^bold>\<turnstile> \<^bold>\<box>\<phi> \<^bold>\<rightarrow> \<^bold>\<box>\<^bold>\<box>\<phi>]"                 (* axiom 4 *)
                   and   "[\<^bold>\<turnstile> G \<^bold>\<leftrightarrow> \<^bold>\<sim>\<^bold>\<box>G]"                 (* G's fixed-point *)
                   and   S_consistency    
-                  shows "[\<^bold>\<turnstile> G \<^bold>\<leftrightarrow> S-Cons]"   (* equivalence of G and S-Cons *)
+                  shows "[\<^bold>\<turnstile> G \<^bold>\<leftrightarrow> S-Cons]"  (* equivalence of G and S-Cons *)
   nitpick oops (* countermodel found *)
 
 (* If F is *-consistent, then F \<^bold>\<turnstile> G\<^sub>(\<^sub>F\<^sub>) \<^bold>\<leftrightarrow> *-Cons\<^sub>(\<^sub>F\<^sub>) *)

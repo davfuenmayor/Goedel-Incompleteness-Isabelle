@@ -83,13 +83,16 @@ lemma non_refutable_v4: fixes G
                         assumes "[\<^bold>\<turnstile> G \<^bold>\<leftrightarrow> \<^bold>\<not>\<^bold>\<box>G]" 
                         and     P_consistency_b_par
                         and     "[\<^bold>\<turnstile> \<^bold>\<circ>G]"
-                      shows   "\<sim>[\<^bold>\<turnstile> \<^bold>\<not>G]" oops (* TODO: prove or refute*)
+                      shows   "\<sim>[\<^bold>\<turnstile> \<^bold>\<not>G]"
+  (* sledgehammer[prover=remote_leo3,verbose](assms) (*Leo-III reports a proof*)*)
+   oops (* TODO: prove or refute*) 
 
 (* If F is \<^bold>\<circ>-consistent, then F \<turnstile>/ \<^bold>\<not>G\<^sub>F *)
 lemma non_refutable_v5: fixes G 
                         assumes "[\<^bold>\<turnstile> G \<^bold>\<leftrightarrow> \<^bold>\<not>\<^bold>\<box>G]" 
                         and     circ_consistency
                         and     "[\<^bold>\<turnstile> \<^bold>\<circ>G]"
-                        shows   "\<sim>[\<^bold>\<turnstile> \<^bold>\<not>G]" oops (* TODO: prove or refute*)
+                        shows   "\<sim>[\<^bold>\<turnstile> \<^bold>\<not>G]" 
+  nitpick oops (* countermodel found *)
 
 end

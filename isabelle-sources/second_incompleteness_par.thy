@@ -88,7 +88,7 @@ lemma G_eq_circCons: fixes G
 
 (* If F is *-consistent, then (assuming Löb's theorem) F \<^bold>\<turnstile>/ *-Cons\<^sub>(\<^sub>F\<^sub>) *)
 lemma nonProv_starCons: assumes "\<forall>\<phi>. [\<^bold>\<turnstile> \<^bold>\<box>(\<^bold>\<box>\<phi>\<^bold>\<rightarrow>\<phi>) \<^bold>\<rightarrow> \<^bold>\<box>\<phi>]"           (* axiom L *)
-                     (* and   star_consistency     (* strengthening the assumptions *) *)
+                        (* and   star_consistency     (* strengthening the assumptions *)  *)
                         shows "\<sim>[\<^bold>\<turnstile> *-Cons]"           (* *-Cons is non-provable *)
   nitpick oops (* countermodel found *) 
   (* TODO: prove or refute if strengthening the assumptions with star_consistency*)
