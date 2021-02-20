@@ -15,22 +15,33 @@ abbreviation circ :: "wo\<Rightarrow>wo" ("\<^bold>\<circ>_" [54] 55) where "\<^
 lemma G_eq_Cons: fixes G 
                  assumes "\<forall>\<phi>. [\<^bold>\<turnstile> \<^bold>\<box>\<phi> \<^bold>\<rightarrow>  \<^bold>\<box>\<^bold>\<box>\<phi>]"                (* axiom 4 *) 
                  and "[\<^bold>\<turnstile> G \<^bold>\<leftrightarrow> \<^bold>\<not>\<^bold>\<box>G]"                   (* G's fixed-point *)
+                 and "[\<^bold>\<turnstile> \<^bold>\<circ>G]"                     (* \<^bold>\<box>G is \<^bold>\<circ>-consistent *)
                  and "[\<^bold>\<turnstile> \<^bold>\<circ>\<^bold>\<box>G]"                     (* \<^bold>\<box>G is \<^bold>\<circ>-consistent *)
                  and "[\<^bold>\<turnstile> \<^bold>\<circ>\<^bold>\<box>\<^bold>\<bottom>]"                    (* \<^bold>\<box>\<^bold>\<bottom> is \<^bold>\<circ>-consistent *)
-                 shows "[\<^bold>\<turnstile> G \<^bold>\<leftrightarrow> \<^bold>\<not>\<^bold>\<box>\<^bold>\<bottom>]"
+                 shows "[\<^bold>\<turnstile> G \<^bold>\<leftrightarrow> \<^bold>\<not>\<^bold>\<box>\<^bold>\<bottom>]" (*using assms by smt*)
 proof -
   have "[\<^bold>\<turnstile> \<^bold>\<bottom> \<^bold>\<rightarrow> G]" by simp                 (* since \<^bold>\<bottom> implies everything *)
   hence "[\<^bold>\<turnstile> \<^bold>\<box>(\<^bold>\<bottom> \<^bold>\<rightarrow> G)]" by simp                       (* by necessitation *)
   hence "[\<^bold>\<turnstile> \<^bold>\<box>\<^bold>\<bottom> \<^bold>\<rightarrow> \<^bold>\<box>G]" by simp                        (* by modal axiom K *)
-  hence "[\<^bold>\<turnstile> \<^bold>\<box>\<^bold>\<bottom> \<^bold>\<rightarrow> \<^bold>\<not>G]" using assms(2) assms(3) (* use fixed-point + \<^bold>\<circ>\<^bold>\<box>G \<dots>*)
+  hence "[\<^bold>\<turnstile> \<^bold>\<box>\<^bold>\<bottom> \<^bold>\<rightarrow> \<^bold>\<not>G]" using assms(2) assms(4) (* use fixed-point + \<^bold>\<circ>\<^bold>\<box>G \<dots>*)
                           by blast      (*\<dots> by contraposition + chain rule*)  
-  hence LtoR: "[\<^bold>\<turnstile> G \<^bold>\<rightarrow> \<^bold>\<not>\<^bold>\<box>\<^bold>\<bottom>]" using assms(2) assms(3) by blast (*by contrap.*)
+  hence LtoR: "[\<^bold>\<turnstile> G \<^bold>\<rightarrow> \<^bold>\<not>\<^bold>\<box>\<^bold>\<bottom>]" using  assms(3) by blast (*by contrap.*)
 
-  have RtoL: "[\<^bold>\<turnstile>  \<^bold>\<not>\<^bold>\<box>\<^bold>\<bottom> \<^bold>\<rightarrow> G]" using assms    (* using all assumptions above *)
-                               by smt        (* and employing an SMT solver *)
-  thus "[\<^bold>\<turnstile> G \<^bold>\<leftrightarrow> \<^bold>\<not>\<^bold>\<box>\<^bold>\<bottom>]" using LtoR RtoL by blast
+  have "[\<^bold>\<turnstile> G \<^bold>\<rightarrow> \<^bold>\<not>\<^bold>\<box>G]" using assms(2) by blast
+  hence "[\<^bold>\<turnstile> \<^bold>\<box>G \<^bold>\<rightarrow> \<^bold>\<not>G]" using assms(4) by blast
+  hence "[\<^bold>\<turnstile> \<^bold>\<box>\<^bold>\<box>G \<^bold>\<rightarrow> \<^bold>\<box>\<^bold>\<not>G]" by simp (* necessitation followed by K*)
+  hence "[\<^bold>\<turnstile> \<^bold>\<box>G \<^bold>\<rightarrow>  \<^bold>\<box>\<^bold>\<not>G]"  using assms(1) by blast (* by chain rule *)
+  hence "[\<^bold>\<turnstile> \<^bold>\<box>G \<^bold>\<rightarrow> (\<^bold>\<box>G \<^bold>\<and> \<^bold>\<box>\<^bold>\<not>G)]" by simp (* trivial*)
+  hence "[\<^bold>\<turnstile> \<^bold>\<box>G \<^bold>\<rightarrow> \<^bold>\<box>(G \<^bold>\<and> \<^bold>\<not>G)]" by simp (* property of normal modal logics*)
+  hence "[\<^bold>\<turnstile> \<^bold>\<box>G \<^bold>\<rightarrow> \<^bold>\<box>\<^bold>\<bottom>]" using assms(3) by blast (*definition of \<^bold>\<bottom>*)
+  hence "[\<^bold>\<turnstile> \<^bold>\<not>\<^bold>\<box>\<^bold>\<bottom> \<^bold>\<rightarrow> \<^bold>\<not>\<^bold>\<box>G]" using assms(5) by blast (*contraposition*)
+  hence RtoL: "[\<^bold>\<turnstile> \<^bold>\<not>\<^bold>\<box>\<^bold>\<bottom> \<^bold>\<rightarrow> G]" using assms(2) by blast (*fixd-point*)
+
+  thus "[\<^bold>\<turnstile> G \<^bold>\<leftrightarrow> \<^bold>\<not>\<^bold>\<box>\<^bold>\<bottom>]" using LtoR RtoL by blast 
 qed
 
+(* lemma  "[\<^bold>\<turnstile> G \<^bold>\<leftrightarrow> \<^bold>\<not>\<^bold>\<box>G] \<Longrightarrow>[\<^bold>\<turnstile> \<^bold>\<circ>\<^bold>\<box>\<^bold>\<bottom>] \<Longrightarrow>[\<^bold>\<turnstile> \<^bold>\<circ>\<^bold>\<box>G] \<Longrightarrow> [\<^bold>\<turnstile> \<^bold>\<circ>G]" nitpick *)
+(*
 (* If F is consistent, then (assuming Löb's theorem) F \<^bold>\<turnstile>/ Cons\<^sub>(\<^sub>F\<^sub>) *)
 lemma nonProv_Cons: assumes "\<forall>\<phi>. [\<^bold>\<turnstile> \<^bold>\<box>(\<^bold>\<box>\<phi>\<^bold>\<rightarrow>\<phi>) \<^bold>\<rightarrow> \<^bold>\<box>\<phi>]"         (* axiom L *) 
                     and "[\<^bold>\<turnstile> \<^bold>\<circ>\<^bold>\<box>\<^bold>\<bottom>]"                 (* \<^bold>\<box>\<^bold>\<bottom> is \<^bold>\<circ>-consistent *)
@@ -104,5 +115,5 @@ lemma nonProv_circCons: assumes "\<forall>\<phi>. [\<^bold>\<turnstile> \<^bold>
                         and   circ_consistency     (* strengthening the assumptions *) 
                         shows "\<sim>[\<^bold>\<turnstile> \<^bold>\<circ>-Cons]"           (* \<^bold>\<circ>-Cons is non-provable *)
   nitpick oops (* countermodel found *) 
-
+*)
 end
